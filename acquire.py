@@ -5,6 +5,7 @@ import re
 import requests 
 from bs4 import BeautifulSoup
 
+import time
 
 def scrape_one_game(url):
     """
@@ -14,7 +15,7 @@ def scrape_one_game(url):
     response = requests.get(url)
     soup = BeautifulSoup(response.text, features="lxml")
 
-    # pulling parameters for a single game
+    # pull parameters for a single game
     name = soup.find('name').get('value')
     year = soup.find("yearpublished").get('value')
     min_players = soup.find("minplayers").get('value')
@@ -58,27 +59,36 @@ def scrape_one_game(url):
 }
 
 
-def scrape_search():
+def scrape_search(page):
     """
-    Scrape the search page of boardgamegeek for the top games. Find id of each game and call scrape_single_game to retrieve remaining parameters.
+    Scrape the browsing page of boardgamegeek for the top games. Find id of each game and call scrape_single_game to retrieve remaining parameters.
     """
-    url = "https://boardgamegeek.com/browse/boardgame/page/1"
+    # initialize games list
+    games = []
+
+    # scrape browsing page 
+    url = "https://boardgamegeek.com/browse/boardgame/page/{}".format(page)
     response = requests.get(url)
     soup = BeautifulSoup(response.text, features="lxml")
     
-    games = []
+    # loop through the hundred games on a single page   
     for x in range(1,101):
+        time.sleep(5)
+        # pull and clean name to compare later
         name = soup.find('div', id='results_objectname{}'.format(x)).text
         name_clean = re.sub(r'\n+(.+)\n.*\n',r'\1', name)
         
+        # pull link id to retrieve stats from api
         link = soup.find('div', id='results_objectname{}'.format(x)).a['href']
         link_id = re.sub(r'.*/(\d+)/.*', r'\1', link)
         
+        # pull remaining stats on browse page
         rank = soup.find_all("td", class_="collection_rank")[x-1].a["name"]
         geek_rating = soup.find_all('td', class_="collection_bggrating")[3*(x-1) + 0].text
         avg_rating = soup.find_all('td', class_="collection_bggrating")[3*(x-1) + 1].text
         votes = soup.find_all('td', class_="collection_bggrating")[3*(x-1) + 2].text
         
+        # create dictionary
         search_page = {
             'name_clean' : name_clean,
             'rank' : rank,
@@ -87,10 +97,17 @@ def scrape_search():
             'votes' : votes
         }
         
+        # pull stats as dictionaty from api page for the currently selected game
         url = "https://www.boardgamegeek.com/xmlapi2/thing?id={}".format(link_id)
+        print(link_id)
         single_page = scrape_one_game(url)
         
+        # combine dictionaries into one
         search_page.update(single_page)
+
+        # update games list
         games.append(search_page)
+
+        # scraping count
         print('the following rank has just been pulled', rank)
     return games

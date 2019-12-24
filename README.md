@@ -8,19 +8,17 @@ Goal: Practice my data science skills and find cool board game insights
 Dataset built by web scraping BoardGameGeek's api and search engine for the top 2000 games .[Access the csv file here.](https://drive.google.com/file/d/1akXzg_fbt3ULhH1wnNTee32rftM-0-Rq/view?usp=sharing)
 
 **Data Dictionary**
-*pulled from search page* 
 - rank: the ranked position of a game based on the game's geek_rating
-- name_clean: the name pulled from the search page, regex'd to pull just the words
+- name_clean: the name pulled from the search page
 - geek_rating: the avg_rating with an added "weight" to pull games with few ratings towards a middle ranking
 - avg_rating: the average rating from all registered bgg users
 - votes: the number of votes each board game has
-*pulled from api*
 - name: the board game name pulled from the api
 - year: the year the game was released
 - min_players: the minimum number of players that can play
 - max_players: the maximum number of players that can play
 - min_time: the minimum time to play (minutes)
-- max_time: the maximum time to play (minutes) - these times are always lies
+- max_time: the maximum time to play (minutes) *these times are always lies*
 - designer: the primary designer of the game
 - categories: a list of categories that the game falls into
 - mechanic: a list of mechanics the game utilizes

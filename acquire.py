@@ -4,6 +4,7 @@ import re
 
 import requests 
 from bs4 import BeautifulSoup
+import os
 
 import time
 
@@ -23,7 +24,9 @@ def scrape_one_game(url):
     min_time = soup.find("minplaytime")['value']
     max_time = soup.find("maxplaytime")['value']
     description = soup.find("description").text
-    designer = soup.find("link", attrs={'type':"boardgamedesigner"})['value']
+    
+    designer = soup.find("link", attrs={'type':"boardgamedesigner"})
+    designer = designer['value'] if designer else 'None'
 
     # pull all categories 
     tags = soup.find_all("link", attrs={'type':'boardgamecategory'})
@@ -52,7 +55,7 @@ def scrape_one_game(url):
     "min_time" : min_time,
     "max_time" : max_time,
     "designer" : designer,
-    "family" : category,
+    "category" : category,
     "mechanic" : mechanic,
     "publisher" : publisher,
     "description" : description,
@@ -111,3 +114,17 @@ def scrape_search(page):
         # scraping count
         print('the following rank has just been pulled', rank)
     return games
+
+
+def get_games():
+    filename = 'top2000games.csv'
+
+    # check for presence of the file or make a new request
+    if os.path.exists(filename):
+        return pd.read_csv(filename, index_col='rank')
+    else:
+        games = acquire.scrape_search(1)
+        for count in range (2,21):
+            games.extend(acquire.scrape_search(count))
+        pd.DataFrame(games).set_index('rank').to_csv(filename)
+        return pd.DataFrame(games, index_col='rank')

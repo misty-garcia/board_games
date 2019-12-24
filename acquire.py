@@ -4,9 +4,11 @@ import re
 
 import requests 
 from bs4 import BeautifulSoup
-import os
-
 import time
+
+import os
+import json
+
 
 def scrape_one_game(url):
     """
@@ -117,14 +119,26 @@ def scrape_search(page):
 
 
 def get_games():
-    filename = 'top2000games.csv'
+    # check for presence of the file or make a new request
+    filename = 'data1.txt'
+    
+    if os.path.exists(filename):
+        print('data1.txt already exists')
+    else:
+        data = acquire.scrape_search(1)
+        for count in range (2,11):
+            data.extend(acquire.scrape_search(count))
+        with open('data1.txt', 'w') as outfile:
+            json.dump(data, outfile)
 
     # check for presence of the file or make a new request
+    filename = 'data2.txt'
+    
     if os.path.exists(filename):
-        return pd.read_csv(filename, index_col='rank')
-    else:
-        games = acquire.scrape_search(1)
-        for count in range (2,21):
-            games.extend(acquire.scrape_search(count))
-        pd.DataFrame(games).set_index('rank').to_csv(filename)
-        return pd.DataFrame(games, index_col='rank')
+        print('data2.txt already exists')
+    else:   
+        data = acquire.scrape_search(11)
+        for count in range (12,21):
+            data.extend(acquire.scrape_search(count))
+        with open('data2.txt', 'w') as outfile:
+            json.dump(data, outfile)

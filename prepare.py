@@ -8,15 +8,9 @@ from nltk.corpus import stopwords
 
 import pandas as pd
 
+def get_numbers(text):
+    return re.sub(r'[^0-9.]', '', text)
 
-def cut_singles(df):
-    """
-    Removes the rows that are the only row for their language. Returns a dataframe with languages that have
-    more than one row
-    """
-    keepers = df.language.value_counts().head(10).index
-    df = df[df.language.isin(keepers)]   
-    return df
 
 def basic_clean(text):
     """
@@ -63,9 +57,6 @@ def remove_stopwords(text):
     filtered_words = [w for w in words if w not in stopword_list]
     return ' '.join(filtered_words)
 
-def remove_numbers(text):
-    text = re.sub(r"[0-9]", '', text)
-    return text
 
 def tokenize(text):
     """

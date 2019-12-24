@@ -34,6 +34,18 @@ def one_word_two_cloud(words1, words2, title1, title2):
 
     for ax in axs: ax.axis('off')
 
+
+def two_word_one_cloud(words, title):
+    data = {k[0] + ' ' + k[1]: v for k, v in words.to_dict().items()}
+    cloud1= WordCloud(background_color='white', width=800, height=800).generate_from_frequencies(data)
+
+    plt.figure(figsize=(10, 8))
+    plt.imshow(cloud)
+    plt.title(title)
+    plt.axis("off")
+    plt.show()
+
+
 def two_word_two_cloud(words1, words2, title1, title2):
     data = {k[0] + ' ' + k[1]: v for k, v in words1.to_dict().items()}
     cloud1 = WordCloud(background_color='white', width=800, height=800).generate_from_frequencies(data)

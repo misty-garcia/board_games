@@ -5,7 +5,10 @@ Due to my love of board games, I've decided to try and determine what makes a bo
 Goal: Practice my data science skills and find cool board game insights
 
 ### Acquire
-Dataset built by web scraping BoardGameGeek's api and search engine for the top 2000 games. [Access the csv file here.](https://drive.google.com/file/d/1akXzg_fbt3ULhH1wnNTee32rftM-0-Rq/view?usp=sharing)
+Dataset built by web scraping BoardGameGeek's api and search engine for the top 2000 games. 
+The data was downloaded Dec 24th, 2019. Access the json files here: 
+[Games 1 - 1000](https://drive.google.com/file/d/1akXzg_fbt3ULhH1wnNTee32rftM-0-Rq/view?usp=sharing)
+[Games 1001 - 2000](https://drive.google.com/file/d/1Q9dC80oSYeMji8FvLiLOYv70cPQBHwgc/view?usp=sharing)
 
 **Data Dictionary**
 - rank: the ranked position of a game based on the game's geek_rating
@@ -20,7 +23,7 @@ Dataset built by web scraping BoardGameGeek's api and search engine for the top 
 - min_time: the minimum time to play (minutes)
 - max_time: the maximum time to play (minutes) *these times are always lies*
 - designer: the primary designer of the game
-- categories: a list of categories that the game falls into
+- category: a list of categories that the game falls into
 - mechanic: a list of mechanics the game utilizes
 - publisher: a list of publishers for the game
 - description: a description that provides a general overview of the game

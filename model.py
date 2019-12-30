@@ -10,15 +10,11 @@ from sklearn.linear_model import LinearRegression
 import statsmodels.api as sm
 from statsmodels.sandbox.regression.predstd import wls_prediction_std
 
-def compute_baseline(y):
-    return np.array([y.mean()]*len(y))
-
-def linear_model(X_train, y_train, df):
+def linear_model(X_train, y_train):
     lm=LinearRegression()
     lm.fit(X_train,y_train)
     lm_predictions=lm.predict(X_train)
-    df['lm']=lm_predictions
-    return df
+    return lm_predictions
 
 def evaluate(actual, model):
     MSE = mean_squared_error(actual, model)

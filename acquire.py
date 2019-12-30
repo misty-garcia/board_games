@@ -10,11 +10,7 @@ import os
 import json
 
 
-def scrape_one_game(url):
-    """
-    Scrape the boardgamegeek api for a single game
-    """
-    # requesting access to api
+def scrape_game_api(url):
     response = requests.get(url)
     soup = BeautifulSoup(response.text, features="lxml")
 
@@ -26,9 +22,13 @@ def scrape_one_game(url):
     min_time = soup.find("minplaytime")['value']
     max_time = soup.find("maxplaytime")['value']
     description = soup.find("description").text
-    
-    designer = soup.find("link", attrs={'type':"boardgamedesigner"})
-    designer = designer['value'] if designer else 'None'
+
+    # pull all designers 
+    tags = soup.find_all("link", attrs={'type':"boardgamedesigner"})
+    designer = []
+    if designer != None:
+        for tag in tags:
+            designer.append(tag['value'])
 
     # pull all categories 
     tags = soup.find_all("link", attrs={'type':'boardgamecategory'})
@@ -48,8 +48,16 @@ def scrape_one_game(url):
     for tag in tags:
         publisher.append(tag['value'])
 
+    # pull stats
+    num_votes = soup.find('usersrated')['value']
+    avg_rating = soup.find('average')['value']
+    geek_rating = soup.find('bayesaverage')['value']
+    complexity = soup.find('averageweight')['value']
+    rank = soup.find('rank')['value']
+
     # return a dictionary of all pulled values
     return {
+    "rank" : rank,
     "name" : name,
     "year" : year,
     "min_players" : min_players,
@@ -61,12 +69,16 @@ def scrape_one_game(url):
     "mechanic" : mechanic,
     "publisher" : publisher,
     "description" : description,
-}
+    "num_votes" : num_votes,
+    "avg_rating" : avg_rating,
+    "geek_rating" : geek_rating,
+    "complexity" : complexity,
+    }
 
 
 def scrape_search(page):
     """
-    Scrape the browsing page of boardgamegeek for the top games. Find id of each game and call scrape_single_game to retrieve remaining parameters.
+    Scrape the browsing page of boardgamegeek for the top games. Find id of each game and call scrape_game_api to retrieve parameters.
     """
     # initialize games list
     games = []
@@ -86,29 +98,21 @@ def scrape_search(page):
         # pull link id to retrieve stats from api
         link = soup.find('div', id='results_objectname{}'.format(x)).a['href']
         link_id = re.sub(r'.*/(\d+)/.*', r'\1', link)
-        
-        # pull remaining stats on browse page
+
         rank = soup.find_all("td", class_="collection_rank")[x-1].a["name"]
-        geek_rating = soup.find_all('td', class_="collection_bggrating")[3*(x-1) + 0].text
-        avg_rating = soup.find_all('td', class_="collection_bggrating")[3*(x-1) + 1].text
-        votes = soup.find_all('td', class_="collection_bggrating")[3*(x-1) + 2].text
-        
+                
         # create dictionary
         search_page = {
             'name_clean' : name_clean,
-            'rank' : rank,
-            'geek_rating' : geek_rating, 
-            'avg_rating' : avg_rating,
-            'votes' : votes
         }
         
         # pull stats as dictionaty from api page for the currently selected game
-        url = "https://www.boardgamegeek.com/xmlapi2/thing?id={}".format(link_id)
+        url = "https://www.boardgamegeek.com/xmlapi2/thing?id={}&stats=1".format(link_id)
         print(link_id)
-        single_page = scrape_one_game(url)
+        parameters = scrape_game_api(url)
         
         # combine dictionaries into one
-        search_page.update(single_page)
+        search_page.update(parameters)
 
         # update games list
         games.append(search_page)
@@ -125,10 +129,10 @@ def get_games():
     if os.path.exists(filename):
         print('data1.txt already exists')
     else:
-        data = acquire.scrape_search(1)
+        data = scrape_search(1)
         for count in range (2,11):
-            data.extend(acquire.scrape_search(count))
-        with open('data1.txt', 'w') as outfile:
+            data.extend(scrape_search(count))
+        with open(filename, 'w') as outfile:
             json.dump(data, outfile)
 
     # check for presence of the file or make a new request
@@ -137,8 +141,8 @@ def get_games():
     if os.path.exists(filename):
         print('data2.txt already exists')
     else:   
-        data = acquire.scrape_search(11)
+        data = scrape_search(11)
         for count in range (12,21):
-            data.extend(acquire.scrape_search(count))
-        with open('data2.txt', 'w') as outfile:
+            data.extend(scrape_search(count))
+        with open(filename, 'w') as outfile:
             json.dump(data, outfile)

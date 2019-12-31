@@ -5,12 +5,12 @@ Due to my love of board games, I've decided to try and determine what makes a bo
 Goal: Practice my data science skills and find cool board game insights
 
 ### Acquire
-Dataset built by web scraping BoardGameGeek's api and search engine for the top 2000 games. 
-The data was downloaded Dec 24th, 2019. Access data used in this analysis: 
+Dataset built by web scraping BoardGameGeek's api and browse page for the top 2000 games. The data was downloaded Dec 30th, 2019. Access data used in this analysis: 
 
-[Games 1 - 1000](https://drive.google.com/file/d/1Bg_vtZ3xclRxI_goC-KnneEYEyNezQEP/view?usp=sharing)
+[Games 1 - 1000](https://drive.google.com/file/d/1NTxq3Oe0KDT-lKvuwgMhWbXyyhr-AzKr/view?usp=sharing)
 
-[Games 1001 - 2000](https://drive.google.com/file/d/1Q9dC80oSYeMji8FvLiLOYv70cPQBHwgc/view?usp=sharing)
+[Games 1001 - 2000](https://drive.google.com/file/d/1CfV9Z7RMtDl0V4FJENq5IwXxxoFF4Hn1/view?usp=sharing)
+
 
 **Data Dictionary**
 - rank: the ranked position of a game based on the game's geek_rating

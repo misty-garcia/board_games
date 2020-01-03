@@ -23,33 +23,13 @@ def evaluate(actual, model):
     r2 = r2_score(actual, model)
     return MSE, SSE, RMSE, r2 
 
-def plot_linear_model(actuals, lm, baseline):
-    plot = pd.DataFrame({'actual': actuals,
-                'linear model': lm,
-                'baseline': baseline.flatten()})\
-    .melt(id_vars=['actual'], var_name='model', value_name='prediction')\
-    .pipe((sns.relplot, 'data'), x='actual', y='prediction', hue='model', alpha=.3)
+def linear_model_and_eval(X_train, y_train):
+    # extract numeric values
+    X_train_num = X_train.select_dtypes(np.number)
 
-    plt.plot([actuals.min(),actuals.max()],[lm.min(),lm.max()], \
-            c='black', ls=':', linewidth = 3)
- 
-    plt.ticklabel_format(style="plain")
-    plt.ylabel("Predicted (in millions)")
-    plt.xlabel("Actuals (in millions)")
-    return plot
+    # predicted values & add to y_train
+    y_train["predict"] = linear_model(X_train_num, y_train)
 
-def plot_residuals(X_train, y_train):
-    return sns.residplot(X_train, y_train)
-
-def plot_regression(x,y):
-    res = sm.OLS(y, x).fit()
-    prstd, iv_l, iv_u = wls_prediction_std(res)
-
-    fig, ax = plt.subplots(figsize=(8,6))
-
-    ax.plot(x, y, 'o', label="data")
-    ax.plot(x, res.fittedvalues, 'r--.', label="OLS")
-    ax.plot(x, iv_u, 'g--',label='97.5% Confidence Level')
-    ax.plot(x, iv_l, 'b--',label='2.5% Confidence Level')
-    ax.legend(loc='best');
-    plt.show()
+    #evaluate 
+    mse, sse, rmse, r2  = evaluate(y_train['geek_rating'], y_train.predict)
+    return mse, sse, rmse, r2

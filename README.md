@@ -1,5 +1,4 @@
 ## What makes a quality board game? 
-##### Analysis executed in python 
 
 Due to my love of board games, I've decided to try and determine what makes a board game well-liked. BoardGameGeek.com (BGG) is the ultimate resourse for all things board games. Thousands of users rate each game and this rating will be used to determine game quality. 
 
@@ -7,7 +6,7 @@ Goal: Practice my data science skills and find cool board game insights
 
 BGG is home is 112,801 board games. Currently, 18,330 board games are ranked. For this analysis, the top 2,000 board games are analyzed, which is about the top 11% of ranked games. 
 
-Dataset is built by web scraping the browse page for the top 2000 games and then utilizing BoardGameGeek's api to pull the respective parameters for each game. The data was downloaded Dec 30th, 2019. Access data used in this analysis: 
+Dataset was built by web scraping the browse page for the top games and then utilizing BoardGameGeek's api to pull the respective parameters for each game. The data was downloaded Dec 30th, 2019. Access data used in this analysis: 
 
 [Games 1 - 1000](https://drive.google.com/file/d/1NTxq3Oe0KDT-lKvuwgMhWbXyyhr-AzKr/view?usp=sharing)
 

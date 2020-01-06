@@ -27,13 +27,13 @@ def linear_model_and_eval(X_train, X_test, y_train, y_test):
     r2_train = r2_score(y_train, train_predict)
 
     # evaluating the model on the test
-    rmse_test = sqrt(mean_squared_error(y_test, test_predict))
-    r2_test = r2_score(y_test, test_predict)
+    # rmse_test = sqrt(mean_squared_error(y_test, test_predict))
+    # r2_test = r2_score(y_test, test_predict)
 
     print("Train set model performance")
     print("RMSE:", rmse_train)
     print("  R2:", r2_train)
     print("")
-    print("Test set model performance") 
-    print("RMSE:", rmse_test)
-    print("  R2:", r2_test)
+    # print("Test set model performance") 
+    # print("RMSE:", rmse_test)
+    # print("  R2:", r2_test)

@@ -106,7 +106,7 @@ def scrape_search(page):
             'name_clean' : name_clean,
         }
         
-        # pull stats as dictionaty from api page for the currently selected game
+        # pull stats as dictionary from api page for the currently selected game
         url = "https://www.boardgamegeek.com/xmlapi2/thing?id={}&stats=1".format(link_id)
         print(link_id)
         parameters = scrape_game_api(url)

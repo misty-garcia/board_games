@@ -108,7 +108,7 @@ def scrape_search(page):
         
         # pull stats as dictionary from api page for the currently selected game
         url = "https://www.boardgamegeek.com/xmlapi2/thing?id={}&stats=1".format(link_id)
-        print(link_id)
+        print('game id', link_id)
         parameters = scrape_game_api(url)
         
         # combine dictionaries into one
@@ -118,31 +118,21 @@ def scrape_search(page):
         games.append(search_page)
 
         # scraping count
-        print('the following rank has just been pulled', rank)
+        print('the following rank just been pulled:', rank)
     return games
 
 
-def get_games():
-    # check for presence of the file or make a new request
-    filename = 'data1.txt'
-    
-    if os.path.exists(filename):
-        print('data1.txt already exists')
-    else:
-        data = scrape_search(1)
-        for count in range (2,11):
-            data.extend(scrape_search(count))
-        with open(filename, 'w') as outfile:
-            json.dump(data, outfile)
+def get_games(thousands):
+    for x in range(thousands):
+        # establish file name of 1000 entries & and first page
+        filename = 'data_' + str(x+1) + '000.txt'
+        first_page = x*10+1
 
-    # check for presence of the file or make a new request
-    filename = 'data2.txt'
-    
-    if os.path.exists(filename):
-        print('data2.txt already exists')
-    else:   
-        data = scrape_search(11)
-        for count in range (12,21):
-            data.extend(scrape_search(count))
-        with open(filename, 'w') as outfile:
-            json.dump(data, outfile)
+        if os.path.exists(filename): #check is file already exists
+            print(filename + ' already exists')
+        else:
+            data = scrape_search(first_page)
+            for count in range (first_page+1,first_page+10):
+                data.extend(scrape_search(count))
+            with open(filename, 'w') as outfile:
+                json.dump(data, outfile)
